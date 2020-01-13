@@ -29,4 +29,7 @@ solver = Solution();
 
 solution = solver.twoSum([1, 2, 3, 4, 5], 5);
 
-print(solution);
+
+# A better solution could be to keep stuff stored in a hash table to really increase speed and as each item is inserted
+# into the hash to check if the compliment to the newly stored value (target - current value) is already a key in the
+# hashmap, with the value of said key being the index of the first number in the nums list with that value
