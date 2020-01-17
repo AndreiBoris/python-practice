@@ -12,65 +12,32 @@ class Solution:
         self.lastNumber = None
 
     def checkPossibility(self, nums: List[int]) -> bool:
+        return self.checkCanBeNonDecreasing(nums, True)
+
+    def checkCanBeNonDecreasing(self, nums: List[int], checkPossibility: bool = False) -> bool:
         lastNumberStore = None
-        for currentNumber in nums:
-            self.twoAgo = self.lastNumber
-            self.lastNumber = lastNumberStore
+        for index, currentNumber in enumerate(nums):
+            lastNumber = lastNumberStore
             lastNumberStore = currentNumber
 
-            if self.lastNumber == None:
+            if lastNumber == None:
                 continue
-            if currentNumber >= self.lastNumber:
+            if currentNumber >= lastNumber:
                 continue
 
-            if self.twoAgo != None and self.twoAgo > currentNumber and self.twoAgo < self.lastNumber:
-                # No way to correct course
-                return False
-            if not self.foundDecrease:
-                self.setFoundDecrease(True)
-                continue
-            # Found a decreasing number before; it is truly hopeless.
+            if checkPossibility:
+                canDropLastNumber = self.checkCanBeNonDecreasing(
+                    [number for innerIndex, number in enumerate(nums) if innerIndex != index - 1]
+                )
+                canDropCurrentNumber = self.checkCanBeNonDecreasing(
+                    [number for innerIndex, number in enumerate(nums) if innerIndex != index]
+                )
+                if canDropLastNumber or canDropCurrentNumber:
+                    continue
+
             return False
+
         return True
-
-    def getLastNumber(self) -> Optional[int]:
-        return self._lastNumber
-
-    def setLastNumber(self, x: Optional[int]) -> None:
-        self._lastNumber = x
-
-    lastNumber = property(
-        getLastNumber,
-        setLastNumber,
-        None,
-        'The number prior to the last one from the List being evaluated.',
-    )
-
-    def getTwoAgo(self) -> Optional[int]:
-        return self._twoAgo
-
-    def setTwoAgo(self, x: Optional[int]) -> None:
-        self._twoAgo = x
-
-    twoAgo = property(
-        getTwoAgo,
-        setTwoAgo,
-        None,
-        'The number prior to the last one from the List being evaluated.',
-    )
-
-    def getFoundDecrease(self) -> bool:
-        return self._foundDecrease
-
-    def setFoundDecrease(self, foundDecrease: bool) -> None:
-        self._foundDecrease = foundDecrease
-
-    foundDecrease = property(
-        getFoundDecrease,
-        setFoundDecrease,
-        None,
-        'Either True or False depending on if a decreasing number has already been discovered in a position previous to the current one',
-    )
 
 solver = Solution()
 
