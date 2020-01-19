@@ -23,11 +23,12 @@ class Solution:
         if len(differingIndices) == 2:
             return A[differingIndices[0]] == B[differingIndices[1]] and A[differingIndices[1]] == B[differingIndices[0]]
 
-        # identical string, can we switch anything around?
-        for indexA, charFromA in enumerate(A):
-            for indexB, charFromB in enumerate(B):
-                if charFromA == charFromB and indexA != indexB:
-                    return True
+        # identical strings, are there any duplicate letters we can switch around?
+        charDict = {}
+        for char in A:
+            if char in charDict:
+                return True
+            charDict[char] = 'Exists'
 
         return False
 
@@ -78,6 +79,16 @@ pairsToTest = [
     {
         'A': '',
         'B': '',
+    },
+    # False
+    {
+        'A': 'qwertyuiopasdfghjklzxcvbnm',
+        'B': 'qwertyuiopasdfghjklzxcvbnm',
+    },
+    # True
+    {
+        'A': 'qwertyuiopasdfghjklzxcvbnmq',
+        'B': 'qwertyuiopasdfghjklzxcvbnmq',
     },
 ]
 
