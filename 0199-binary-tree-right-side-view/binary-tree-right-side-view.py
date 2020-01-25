@@ -1,5 +1,6 @@
 import sys
 from typing import List, Optional
+from queue import *
 
 # Definition for a binary tree node.
 class TreeNode:
@@ -10,7 +11,7 @@ class TreeNode:
 
 class Solution:
     def rightSideView(self, root: TreeNode) -> List[int]:
-
+        return []
 '''
 The will do dfs.
 
@@ -31,6 +32,24 @@ We will terminate the loop when stack is empty
 To produce the return value we will loop through the range 0 -> deepest depth and take the values from the dict
 '''
         
+inputNums = [1, 2, 3, None, 5, None, 4]
+rootNode = None
+currentNode = None
+positionsToFillQueue = Queue()
+# Create the tree structure as presented by the problem
+for num in inputNums:
+    currentNode = None if num == None else TreeNode(num)
+    if currentNode != None:
+        positionsToFillQueue.put((currentNode, 'left'))
+        positionsToFillQueue.put((currentNode, 'right'))
+    if rootNode == None:
+        rootNode = currentNode
+        # TODO Technically we should check that root is not None
+        continue
+    # TODO: Technically we should check that we don't have a full row of None
+    nodeToFill, position = positionsToFillQueue.get()
+    setattr(nodeToFill, position, currentNode)
+
 solver = Solution()
 
 # for digits in listOfDigits:
