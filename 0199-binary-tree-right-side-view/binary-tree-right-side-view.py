@@ -1,5 +1,5 @@
 import sys
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from queue import *
 
 # Definition for a binary tree node.
@@ -10,8 +10,34 @@ class TreeNode:
         self.right = None
 
 class Solution:
+    '''
+    Given a binary tree, imagine yourself standing on the right side of it, 
+    return the values of the nodes you can see ordered from top to bottom.
+    '''
     def rightSideView(self, root: TreeNode) -> List[int]:
-        return []
+        # TODO: In a real problem we don't want to use a regular List for a stack for performance reasons
+        stack: List[Tuple[TreeNode, int]] = [(root, 1)]
+        resultDict = {}
+        deepestDepthRecorded = 1
+
+        if root == None:
+            return []
+
+        while len(stack) > 0:
+            currentNode, depth = stack.pop()
+
+            # We are always going to find the right-most node first
+            resultDict.setdefault(depth, currentNode.val)
+
+            if depth > deepestDepthRecorded:
+                deepestDepthRecorded = depth
+            if currentNode.left != None:
+                stack.append((currentNode.left, depth + 1))
+            if currentNode.right != None:
+                stack.append((currentNode.right, depth + 1))
+                
+        return [resultDict[key] for key in [val + 1 for val in range(deepestDepthRecorded)]]
+
 '''
 The will do dfs.
 
@@ -32,7 +58,8 @@ We will terminate the loop when stack is empty
 To produce the return value we will loop through the range 0 -> deepest depth and take the values from the dict
 '''
         
-inputNums = [1, 2, 3, None, 5, None, 4]
+# inputNums = [1, 2, 3, None, 5, None, 4]
+inputNums = []
 rootNode = None
 currentNode = None
 positionsToFillQueue = Queue()
@@ -52,5 +79,4 @@ for num in inputNums:
 
 solver = Solution()
 
-# for digits in listOfDigits:
-#     print(solver.rightSideView(digits))
+print(solver.rightSideView(rootNode))
