@@ -3,6 +3,8 @@ from typing import List
 LAND = '1'
 WATER = '0'
 
+# TODO: Review a superior solutions
+
 def overlaps(min1, max1, min2, max2):
     overlap = max(0, min(max1, max2) - max(min1, min2))
     if overlap > 0:
